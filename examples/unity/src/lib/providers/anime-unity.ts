@@ -77,19 +77,15 @@ export class AnimeUnityProvider implements Provider {
 
     const vixHtml = await vixResponse.text();
 
-    const playlistUrl = constructPlaylistUrl(vixHtml);
+    const mp4Url = getMp4UrlFromVixResponse(vixHtml);
 
-    if (!playlistUrl) {
-      throw new Error("Playlist URL not found");
-    }
-
-    const manifest = await fetch(playlistUrl);
-
-    const manifestText = await manifest.text();
-
-    const streams = getStreamsFromM3u(manifestText);
-
-    return streams;
+    return [
+      {
+        id: `au${id}`,
+        title: "Stream",
+        url: mp4Url,
+      },
+    ];
   }
 
   async getMeta(id: string) {
@@ -186,149 +182,16 @@ function extractVixcloudUrl(htmlText: string) {
   return url.replaceAll("&amp;", "&");
 }
 
-function constructPlaylistUrl(html: string) {
-  const masterPlaylist = getMasterPlaylist(html);
+function getMp4UrlFromVixResponse(html: string) {
+  const regex = /window\.downloadUrl\s*=\s*'([^']+)'/;
 
-  const baseUrl = masterPlaylist.url;
+  const match = html.match(regex);
 
-  const params = new URLSearchParams();
+  const url = match?.[1];
 
-  for (const [key, value] of Object.entries(masterPlaylist.params)) {
-    if (value !== "") {
-      params.append(key, value as string);
-    }
+  if (!url) {
+    throw new Error("Mp4 URL not found");
   }
 
-  params.append("h", "1");
-
-  return `${baseUrl}?${params.toString()}`;
-}
-
-function getMasterPlaylist(html: string) {
-  const marker = "window.masterPlaylist";
-  const markerIdx = html.indexOf(marker);
-  if (markerIdx === -1) return null;
-
-  // find '=' after the marker
-  const eqIdx = html.indexOf("=", markerIdx + marker.length);
-  if (eqIdx === -1) return null;
-
-  // find first '{' after '='
-  const firstBrace = html.indexOf("{", eqIdx);
-  if (firstBrace === -1) return null;
-
-  // scan to find the matching closing brace, handling strings & comments
-  let i = firstBrace;
-  let braceCount = 0;
-  let inSingle = false,
-    inDouble = false,
-    inTemplate = false;
-  const len = html.length;
-
-  for (; i < len; i++) {
-    const ch = html[i];
-    const next = html[i + 1];
-
-    // handle entering/exiting single/double/template strings (respecting escapes)
-    if (ch === "'" && !inDouble && !inTemplate) {
-      // count preceding backslashes
-      let k = i - 1,
-        bs = 0;
-      while (k >= 0 && html[k] === "\\") {
-        bs++;
-        k--;
-      }
-      if (bs % 2 === 0) inSingle = !inSingle;
-    } else if (ch === '"' && !inSingle && !inTemplate) {
-      let k = i - 1,
-        bs = 0;
-      while (k >= 0 && html[k] === "\\") {
-        bs++;
-        k--;
-      }
-      if (bs % 2 === 0) inDouble = !inDouble;
-    } else if (ch === "`" && !inSingle && !inDouble) {
-      let k = i - 1,
-        bs = 0;
-      while (k >= 0 && html[k] === "\\") {
-        bs++;
-        k--;
-      }
-      if (bs % 2 === 0) inTemplate = !inTemplate;
-    }
-
-    // if inside a string/template, skip brace counting and comment detection
-    if (inSingle || inDouble || inTemplate) continue;
-
-    // skip comments
-    if (ch === "/" && next === "/") {
-      // single-line comment: skip until newline
-      i += 2;
-      while (i < len && html[i] !== "\n") i++;
-      continue;
-    }
-    if (ch === "/" && next === "*") {
-      // block comment: skip until */
-      i += 2;
-      while (i + 1 < len && !(html[i] === "*" && html[i + 1] === "/")) i++;
-      i++; // land on the '/' of '*/' (for loop will increment)
-      continue;
-    }
-
-    // count braces
-    if (ch === "{") {
-      braceCount++;
-      // if this is the starting brace we already found, we also count it (normal)
-    } else if (ch === "}") {
-      braceCount--;
-      if (braceCount === 0) {
-        // found the matching closing brace
-        let end = i + 1;
-        // optionally consume whitespace and a trailing semicolon
-        while (end < len && /\s/.test(html[end])) end++;
-        if (html[end] === ";") end++;
-        const objLiteral = html.slice(firstBrace, end); // includes braces (and semicolon if present)
-        // parse into object (wrap with parentheses so object-literal is treated as an expression)
-        try {
-          const parsed = Function(
-            '"use strict"; return (' + objLiteral + ")"
-          )();
-          return parsed;
-        } catch (e) {
-          throw new Error(`Parsing failed: ${String(e)}`);
-        }
-      }
-    }
-  }
-}
-
-function getStreamsFromM3u(contents: string) {
-  const parser = new m3u8Parser.Parser();
-
-  parser.push(contents);
-
-  parser.end();
-
-  const manifest = parser.manifest;
-
-  if (!manifest.playlists?.length && !manifest.segments?.length) {
-    throw new Error("Invalid playlist");
-  }
-
-  const videos =
-    manifest.segments.length > 0
-      ? manifest.segments.map((seg, i) => ({
-          id: `au${i + 1}`,
-          title: seg.title || `Video ${i + 1}`,
-          url: seg.uri,
-        }))
-      : manifest.playlists
-      ? manifest.playlists.map((pl, i) => ({
-          id: `au${i + 1}`,
-          title: (pl.attributes?.NAME as string) || `Stream ${i + 1}`,
-          url: pl.uri,
-        }))
-      : [];
-
-  return videos;
+  return url;
 }
