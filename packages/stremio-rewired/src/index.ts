@@ -46,11 +46,23 @@ type CatalogDefinition = {
   }>;
 };
 
-type CatalogItem = {
+export type Video = {
+  id: string;
+  title: string;
+  released: string;
+  thumbnail?: string;
+  episode?: number;
+  season?: number;
+};
+
+export type CatalogItem = {
   id: string;
   type: ContentType;
   name: string;
   poster?: string;
+  videos?: Array<Video>;
+  background?: string;
+  description?: string;
 };
 
 type Resource = "catalog" | "meta" | "stream" | "subtitles" | "addon_catalog";
@@ -217,5 +229,5 @@ function extractSearchFromExtra(extra: string): string | undefined {
     return undefined;
   }
 
-  return search.replace(".json", "");
+  return decodeURIComponent(search.replace(".json", ""));
 }

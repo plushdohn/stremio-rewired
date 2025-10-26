@@ -1,7 +1,20 @@
 import z from "zod";
-import m3u8Parser from "m3u8-parser";
 
 import { Provider } from "./interface";
+import { CatalogItem } from "stremio-rewired";
+
+interface AnimeUnityVideo {
+  id: number;
+  title?: string;
+  imageurl?: string;
+  title_eng: string;
+  title_it?: string;
+  slug: string;
+  episodes_count: number;
+  date: string;
+  imageurl_cover?: string;
+  plot?: string;
+}
 
 export class AnimeUnityProvider implements Provider {
   async search(title: string) {
@@ -88,12 +101,11 @@ export class AnimeUnityProvider implements Provider {
     ];
   }
 
-  async getMeta(id: string) {
+  async getMeta(id: string): Promise<CatalogItem> {
     const response = await fetch(`https://www.animeunity.so/anime/${id}`);
 
     const html = await response.text();
 
-    // find <video-player anime="json-encoded-data" />
     const match = html.match(/<video-player anime="([^"]+)"/);
 
     if (!match) {
@@ -104,12 +116,22 @@ export class AnimeUnityProvider implements Provider {
       .replaceAll("\\&quot;", '\\"')
       .replaceAll("&quot;", '"');
 
-    const json: { title: string } = JSON.parse(cleanedMatch);
+    const json: AnimeUnityVideo = JSON.parse(cleanedMatch);
 
     return {
       id: `au${id}`,
-      name: json.title,
-      type: "series" as const,
+      name: json.title_it || json.title_eng,
+      type: "series",
+      poster: json.imageurl,
+      background: json.imageurl_cover,
+      description: json.plot,
+      videos: Array.from({ length: json.episodes_count }, (_, index) => ({
+        id: `au${json.id + index}-${json.slug}`,
+        title: `Episode ${index + 1}`,
+        released: new Date(Number.parseInt(json.date), 0).toISOString(),
+        episode: index + 1,
+        season: 1,
+      })),
     };
   }
 
