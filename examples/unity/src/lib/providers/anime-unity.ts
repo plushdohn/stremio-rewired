@@ -1,7 +1,7 @@
 import z from "zod";
+import { CatalogItem } from "stremio-rewired";
 
 import { Provider } from "./interface";
-import { CatalogItem } from "stremio-rewired";
 
 interface AnimeUnityVideo {
   id: number;
@@ -14,6 +14,13 @@ interface AnimeUnityVideo {
   date: string;
   imageurl_cover?: string;
   plot?: string;
+}
+
+interface AnimeUnityEpisode {
+  id: number;
+  number: string;
+  file_name: string;
+  link: string;
 }
 
 export class AnimeUnityProvider implements Provider {
@@ -76,7 +83,13 @@ export class AnimeUnityProvider implements Provider {
   async getStreams(
     id: string
   ): Promise<Array<{ id: string; title: string; url: string }>> {
-    const response = await fetch(`https://www.animeunity.so/anime/${id}`);
+    const [animeId, episodeId] = id.split("--");
+
+    const response = await fetch(
+      `https://www.animeunity.so/anime/${animeId}${
+        episodeId ? `/${episodeId}` : ""
+      }`
+    );
 
     const html = await response.text();
 
@@ -94,7 +107,7 @@ export class AnimeUnityProvider implements Provider {
 
     return [
       {
-        id: `au${id}`,
+        id: `au${animeId}${episodeId ? `--${episodeId}` : ""}`,
         title: "Stream",
         url: mp4Url,
       },
@@ -106,30 +119,52 @@ export class AnimeUnityProvider implements Provider {
 
     const html = await response.text();
 
-    const match = html.match(/<video-player anime="([^"]+)"/);
+    const regex =
+      /<video-player[^>]*anime="([^"]+)"[^>]*episodes="([^"]+)"[^>]|<video-player[^>]*episodes="([^"]+)"[^>]*anime="([^"]+)"/gi;
 
-    if (!match) {
+    const matches = html.matchAll(regex);
+
+    let rawDetails: string;
+    let rawEpisodes: string;
+
+    for (const match of matches) {
+      if (match[1] && match[2]) {
+        rawDetails = match[1];
+        rawEpisodes = match[2];
+      } else if (match[3] && match[4]) {
+        rawDetails = match[4];
+        rawEpisodes = match[3];
+      }
+    }
+
+    if (!rawDetails || !rawEpisodes) {
       throw new Error("Meta not found");
     }
 
-    const cleanedMatch = match[1]
+    const cleanedAnimeDetails = rawDetails
       .replaceAll("\\&quot;", '\\"')
       .replaceAll("&quot;", '"');
 
-    const json: AnimeUnityVideo = JSON.parse(cleanedMatch);
+    const cleanedEpisodes = rawEpisodes
+      .replaceAll("\\&quot;", '\\"')
+      .replaceAll("&quot;", '"');
+
+    const details: AnimeUnityVideo = JSON.parse(cleanedAnimeDetails);
+
+    const episodes: AnimeUnityEpisode[] = JSON.parse(cleanedEpisodes);
 
     return {
       id: `au${id}`,
-      name: json.title_it || json.title_eng,
+      name: details.title_it || details.title_eng,
       type: "series",
-      poster: json.imageurl,
-      background: json.imageurl_cover,
-      description: json.plot,
-      videos: Array.from({ length: json.episodes_count }, (_, index) => ({
-        id: `au${json.id + index}-${json.slug}`,
-        title: `Episode ${index + 1}`,
-        released: new Date(Number.parseInt(json.date), 0).toISOString(),
-        episode: index + 1,
+      poster: details.imageurl,
+      background: details.imageurl_cover,
+      description: details.plot,
+      videos: episodes.map((episode) => ({
+        id: `au${id}--${episode.id}`,
+        title: `Episodio ${episode.number}`,
+        released: new Date(Number.parseInt(details.date), 0).toISOString(),
+        episode: Number.parseInt(episode.number),
         season: 1,
       })),
     };
