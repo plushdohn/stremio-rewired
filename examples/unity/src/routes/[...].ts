@@ -2,7 +2,9 @@ import { defineHandler } from "nitro/h3";
 import { createHandler, launch } from "stremio-rewired";
 import { AnimeUnityProvider } from "../lib/providers/anime-unity";
 
-launch(3000);
+if (process.env.NODE_ENV === "development") {
+  launch(3000);
+}
 
 const provider = new AnimeUnityProvider();
 
