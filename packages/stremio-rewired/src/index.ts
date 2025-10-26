@@ -120,7 +120,7 @@ export function createHandler(config: Config) {
     if (pathname.match(/^\/catalog\/(movie|series|channel|tv)\/.+\.json$/)) {
       logger.info(`Handling catalog request for ${pathname}`);
 
-      const [_, type, id, extra] = pathname.split("/").slice(1);
+      let [_, type, id, extra] = pathname.split("/").slice(1);
 
       if (!type || !id) {
         return new Response("Bad request", { status: 400 });
@@ -145,6 +145,8 @@ export function createHandler(config: Config) {
 
         return new Response("Not found", { status: 404 });
       }
+
+      id = decodeURIComponent(id).replace(".json", "");
 
       logger.info(
         `Requesting catalog for type: ${type} id: ${id} extra: ${extra}`
@@ -173,7 +175,7 @@ export function createHandler(config: Config) {
     if (pathname.match(/^\/meta\/(movie|series|channel|tv)\/.+\.json$/)) {
       logger.info(`Handling meta request for ${pathname}`);
 
-      const [_, type, id] = pathname.split("/").slice(1);
+      let [_, type, id] = pathname.split("/").slice(1);
 
       if (!type || !id) {
         return new Response("Bad request", { status: 400 });
@@ -186,6 +188,8 @@ export function createHandler(config: Config) {
       if (!config.onMetaRequest) {
         return new Response("Not found", { status: 404 });
       }
+
+      id = decodeURIComponent(id).replace(".json", "");
 
       logger.info(`Requesting meta for ${type} ${id}`);
 
