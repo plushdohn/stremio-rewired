@@ -135,6 +135,10 @@ export function createHandler(config: Config) {
         return new Response("Not found", { status: 404 });
       }
 
+      logger.info(
+        `Requesting catalog for type: ${type} id: ${id} extra: ${extra}`
+      );
+
       const search = extra ? extractSearchFromExtra(extra) : undefined;
 
       const catalogResponse = await config.onCatalogRequest(
