@@ -98,13 +98,17 @@ export class AnimeUnityProvider implements Provider {
     const html = await response.text();
 
     // find <video-player anime="json-encoded-data" />
-    const match = html.match(/<video-player anime="([^"]+)" \/>/);
+    const match = html.match(/<video-player anime="([^"]+)"/);
 
     if (!match) {
       throw new Error("Meta not found");
     }
 
-    const json: { title: string } = JSON.parse(match[1].replace("&quot;", '"'));
+    const cleanedMatch = match[1]
+      .replaceAll("\\&quot;", '\\"')
+      .replaceAll("&quot;", '"');
+
+    const json: { title: string } = JSON.parse(cleanedMatch);
 
     return {
       id: `au${id}`,
