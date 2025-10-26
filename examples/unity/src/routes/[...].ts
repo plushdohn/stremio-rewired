@@ -25,7 +25,7 @@ export default defineHandler({
               isRequired: true,
             },
           ],
-          idPrefixes: ["animeunity:"],
+          idPrefixes: ["animeunity-"],
         },
       ],
       description:
@@ -46,7 +46,7 @@ export default defineHandler({
       };
     },
     onMetaRequest: async (type, id) => {
-      const idWithoutPrefix = id.replace("animeunity:", "");
+      const idWithoutPrefix = id.replace("animeunity-", "");
 
       const meta = await provider.getMeta(idWithoutPrefix);
 
@@ -55,7 +55,7 @@ export default defineHandler({
       };
     },
     onStreamRequest: async (type, id) => {
-      const idWithoutPrefix = id.replace("animeunity:", "");
+      const idWithoutPrefix = id.replace("animeunity-", "");
 
       const streams = await provider.getStreams(idWithoutPrefix);
 

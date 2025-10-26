@@ -51,7 +51,7 @@ export class AnimeUnityProvider implements Provider {
 
       return data.records.map((record) => ({
         title: record.title_eng,
-        id: `animeunity:${record.id}-${record.slug}`,
+        id: `animeunity-${record.id}-${record.slug}`,
         imageUrl: record.imageurl,
       }));
     } catch (error) {
@@ -89,8 +89,6 @@ export class AnimeUnityProvider implements Provider {
 
     const manifestText = await manifest.text();
 
-    console.log(manifestText);
-
     const streams = getStreamsFromM3u(manifestText);
 
     return streams;
@@ -111,7 +109,7 @@ export class AnimeUnityProvider implements Provider {
     const json: { title: string } = JSON.parse(match[1].replace("&quot;", '"'));
 
     return {
-      id: `animeunity:${id}`,
+      id: `animeunity-${id}`,
       name: json.title,
       type: "series" as const,
     };
@@ -318,13 +316,13 @@ function getStreamsFromM3u(contents: string) {
   const videos =
     manifest.segments.length > 0
       ? manifest.segments.map((seg, i) => ({
-          id: `animeunity:${i + 1}`,
+          id: `animeunity-${i + 1}`,
           title: seg.title || `Video ${i + 1}`,
           url: `${seg.uri}#.m3u8`,
         }))
       : manifest.playlists
       ? manifest.playlists.map((pl, i) => ({
-          id: `animeunity:${i + 1}`,
+          id: `animeunity-${i + 1}`,
           title: (pl.attributes?.NAME as string) || `Stream ${i + 1}`,
           url: `${pl.uri}#.m3u8`,
         }))
