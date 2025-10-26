@@ -1,0 +1,21 @@
+{
+  "name": "stremio-addon-unity",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "nitro dev"
+  },
+  "dependencies": {
+    "@sparticuz/chromium": "^141.0.0",
+    "m3u8-parser": "^7.2.0",
+    "puppeteer-core": "^24.26.1",
+    "stremio-rewired": "workspace:*",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/m3u8-parser": "^7.2.5",
+    "nitro": "3.0.1-alpha.0",
+    "puppeteer": "^24.26.1",
+    "typescript": "5.9.3"
+  }
+}
