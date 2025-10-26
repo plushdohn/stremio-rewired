@@ -64,15 +64,9 @@ export class AnimeUnityProvider implements Provider {
   async getStreams(
     id: string
   ): Promise<Array<{ id: string; title: string; url: string }>> {
-    const response = await fetch(`https://www.animeunity.so/anime/${id}`);
+    const proxy = await this.getProxy();
 
-    const html = await response.text();
-
-    if (html.includes("https://vixcloud.co/playlist/")) {
-      console.log("FOUND ITEM");
-    }
-
-    const browser = await getPuppeteer();
+    const browser = await getPuppeteer(proxy);
 
     const page = await browser.pages().then((pages) => pages[0]);
 
@@ -96,33 +90,7 @@ export class AnimeUnityProvider implements Provider {
 
               const m3u8contents = await response.text();
 
-              const parser = new m3u8Parser.Parser();
-
-              parser.push(m3u8contents);
-
-              parser.end();
-
-              const manifest = parser.manifest;
-
-              if (!manifest.playlists?.length && !manifest.segments?.length) {
-                throw new Error("Invalid playlist");
-              }
-
-              const videos =
-                manifest.segments.length > 0
-                  ? manifest.segments.map((seg, i) => ({
-                      id: `animeunity:${i + 1}`,
-                      title: seg.title || `Video ${i + 1}`,
-                      url: `${seg.uri}#.m3u8`,
-                    }))
-                  : manifest.playlists
-                  ? manifest.playlists.map((pl, i) => ({
-                      id: `animeunity:${i + 1}`,
-                      title:
-                        (pl.attributes?.NAME as string) || `Stream ${i + 1}`,
-                      url: `${pl.uri}#.m3u8`,
-                    }))
-                  : [];
+              const videos = this.getStreamsFromM3u(m3u8contents);
 
               resolve(videos);
             }
@@ -143,6 +111,52 @@ export class AnimeUnityProvider implements Provider {
     await browser.close();
 
     return url;
+  }
+
+  private async getProxy() {
+    const response = await fetch(
+      "https://api.proxyscrape.com/v4/free-proxy-list/get?request=displayproxies&protocol=https&timeout=10000&country=all&ssl=all&anonymity=all&skip=0&limit=10"
+    );
+
+    const text = await response.text();
+
+    const lines = text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean);
+
+    return lines[Math.floor(Math.random() * lines.length)];
+  }
+
+  private getStreamsFromM3u(contents: string) {
+    const parser = new m3u8Parser.Parser();
+
+    parser.push(contents);
+
+    parser.end();
+
+    const manifest = parser.manifest;
+
+    if (!manifest.playlists?.length && !manifest.segments?.length) {
+      throw new Error("Invalid playlist");
+    }
+
+    const videos =
+      manifest.segments.length > 0
+        ? manifest.segments.map((seg, i) => ({
+            id: `animeunity:${i + 1}`,
+            title: seg.title || `Video ${i + 1}`,
+            url: `${seg.uri}#.m3u8`,
+          }))
+        : manifest.playlists
+        ? manifest.playlists.map((pl, i) => ({
+            id: `animeunity:${i + 1}`,
+            title: (pl.attributes?.NAME as string) || `Stream ${i + 1}`,
+            url: `${pl.uri}#.m3u8`,
+          }))
+        : [];
+
+    return videos;
   }
 
   private async getCrsfToken(response: Response) {
@@ -184,15 +198,20 @@ export class AnimeUnityProvider implements Provider {
   }
 }
 
-async function getPuppeteer() {
+async function getPuppeteer(proxy: string) {
   if (process.env.VERCEL_ENV) {
     const chromium = (await import("@sparticuz/chromium")).default;
 
-    const puppeteer = await import("puppeteer-core");
+    const puppeteer = (await import("puppeteer-extra")).default;
+
+    const StealthPlugin = (await import("puppeteer-extra-plugin-stealth"))
+      .default;
+
+    puppeteer.use(StealthPlugin());
 
     return puppeteer.launch({
       dumpio: true,
-      args: chromium.args,
+      args: [...chromium.args, `--proxy-server=${proxy}`],
       executablePath: await chromium.executablePath(),
     });
   }
@@ -201,5 +220,6 @@ async function getPuppeteer() {
 
   return puppeteer.launch({
     devtools: false,
+    args: [`--proxy-server=${proxy}`],
   });
 }
