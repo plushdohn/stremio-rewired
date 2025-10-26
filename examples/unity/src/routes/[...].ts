@@ -30,7 +30,7 @@ export default defineHandler({
       idPrefixes: ["animeunity-"],
       description:
         "Source content and catalogs from AnimeUnity (italian anime streaming website)",
-      resources: ["stream"],
+      resources: ["stream", "catalog"],
       types: ["series"],
     },
     onCatalogRequest: async (type, id, search) => {
