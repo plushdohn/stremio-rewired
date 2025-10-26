@@ -118,6 +118,8 @@ export function createHandler(config: Config) {
     }
 
     if (pathname.match(/^\/catalog\/(movie|series|channel|tv)\/.+\.json$/)) {
+      logger.info(`Handling catalog request for ${pathname}`);
+
       const [_, type, id, extra] = pathname.split("/").slice(1);
 
       if (!type || !id) {
@@ -156,6 +158,10 @@ export function createHandler(config: Config) {
         search
       );
 
+      logger.info(
+        `Responding with catalog response: ${JSON.stringify(catalogResponse)}`
+      );
+
       return new Response(JSON.stringify(catalogResponse), {
         headers: {
           "Content-Type": "application/json",
@@ -165,6 +171,8 @@ export function createHandler(config: Config) {
 
     // matches /meta/{type}/{id}.json
     if (pathname.match(/^\/meta\/(movie|series|channel|tv)\/.+\.json$/)) {
+      logger.info(`Handling meta request for ${pathname}`);
+
       const [_, type, id] = pathname.split("/").slice(1);
 
       if (!type || !id) {
@@ -179,7 +187,13 @@ export function createHandler(config: Config) {
         return new Response("Not found", { status: 404 });
       }
 
+      logger.info(`Requesting meta for ${type} ${id}`);
+
       const metaResponse = await config.onMetaRequest(type as ContentType, id);
+
+      logger.info(
+        `Responding with meta response: ${JSON.stringify(metaResponse)}`
+      );
 
       return new Response(JSON.stringify(metaResponse), {
         headers: {

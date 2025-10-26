@@ -27,7 +27,7 @@ export default defineHandler({
           ],
         },
       ],
-      idPrefixes: ["animeunity-"],
+      idPrefixes: ["au"],
       description:
         "Source content and catalogs from AnimeUnity (italian anime streaming website)",
       resources: ["stream", "catalog"],
@@ -46,7 +46,7 @@ export default defineHandler({
       };
     },
     onMetaRequest: async (type, id) => {
-      const idWithoutPrefix = id.replace("animeunity-", "");
+      const idWithoutPrefix = id.replace("au", "");
 
       const meta = await provider.getMeta(idWithoutPrefix);
 
@@ -55,7 +55,7 @@ export default defineHandler({
       };
     },
     onStreamRequest: async (type, id) => {
-      const idWithoutPrefix = id.replace("animeunity-", "");
+      const idWithoutPrefix = id.replace("au", "");
 
       const streams = await provider.getStreams(idWithoutPrefix);
 
