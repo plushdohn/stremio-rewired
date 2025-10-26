@@ -25,9 +25,9 @@ export default defineHandler({
               isRequired: true,
             },
           ],
-          idPrefixes: ["animeunity-"],
         },
       ],
+      idPrefixes: ["animeunity-"],
       description:
         "Source content and catalogs from AnimeUnity (italian anime streaming website)",
       resources: ["stream"],

@@ -44,7 +44,6 @@ type CatalogDefinition = {
     name: string;
     isRequired?: boolean;
   }>;
-  idPrefixes?: string[];
 };
 
 type CatalogItem = {
@@ -64,6 +63,7 @@ type Manifest = {
   types: ContentType[];
   catalogs: (string | CatalogDefinition)[];
   resources: Resource[];
+  idPrefixes?: string[];
 };
 
 export function createHandler(config: Config) {
