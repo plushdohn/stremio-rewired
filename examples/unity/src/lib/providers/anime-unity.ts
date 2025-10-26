@@ -320,13 +320,13 @@ function getStreamsFromM3u(contents: string) {
       ? manifest.segments.map((seg, i) => ({
           id: `au${i + 1}`,
           title: seg.title || `Video ${i + 1}`,
-          url: `${seg.uri}#.m3u8`,
+          url: seg.uri,
         }))
       : manifest.playlists
       ? manifest.playlists.map((pl, i) => ({
           id: `au${i + 1}`,
           title: (pl.attributes?.NAME as string) || `Stream ${i + 1}`,
-          url: `${pl.uri}#.m3u8`,
+          url: pl.uri,
         }))
       : [];
 
