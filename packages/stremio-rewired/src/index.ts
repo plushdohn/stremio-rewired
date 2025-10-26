@@ -53,7 +53,7 @@ type CatalogItem = {
   poster?: string;
 };
 
-type Resource = "catalog" | "stream" | "media" | "subtitles" | "addon_catalog";
+type Resource = "catalog" | "meta" | "stream" | "subtitles" | "addon_catalog";
 
 type Manifest = {
   id: string;
