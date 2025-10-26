@@ -12,7 +12,7 @@ export default defineHandler({
   fetch: createHandler({
     manifest: {
       id: "org.stremio.unity",
-      version: "0.0.1",
+      version: "0.0.2",
       name: "Unity",
       catalogs: [
         {
