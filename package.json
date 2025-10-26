@@ -1,10 +1,10 @@
 {
     "name": "stremio-rewired",
+    "devDependencies": {
+        "typescript": "5.9.3"
+    },
     "workspaces": [
         "examples/*",
         "packages/*"
-    ],
-    "devDependencies": {
-        "typescript": "5.9.3"
-    }
+    ]
 }

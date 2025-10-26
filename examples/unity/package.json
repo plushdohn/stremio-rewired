@@ -6,11 +6,7 @@
     "dev": "nitro dev"
   },
   "dependencies": {
-    "@sparticuz/chromium": "^141.0.0",
     "m3u8-parser": "^7.2.0",
-    "puppeteer-core": "^24.26.1",
-    "puppeteer-extra": "^3.3.6",
-    "puppeteer-extra-plugin-stealth": "^2.11.2",
     "stremio-rewired": "workspace:*",
     "zod": "^4.1.12"
   },

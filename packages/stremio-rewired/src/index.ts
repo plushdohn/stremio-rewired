@@ -10,6 +10,15 @@ type Config = {
     id: string,
     search?: string
   ) => Promise<CatalogResponse>;
+  onMetaRequest?: (type: ContentType, id: string) => Promise<MetaResponse>;
+};
+
+type MetaResponse = {
+  meta: {
+    id: string;
+    type: ContentType;
+    name: string;
+  };
 };
 
 type StreamResponse = {
@@ -25,7 +34,7 @@ type Stream = {
   url: string;
 };
 
-type ContentType = "movie" | "series" | "channel" | "tv";
+export type ContentType = "movie" | "series" | "channel" | "tv";
 
 type CatalogDefinition = {
   id: string;
@@ -148,6 +157,31 @@ export function createHandler(config: Config) {
       );
 
       return new Response(JSON.stringify(catalogResponse), {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+    }
+
+    // matches /meta/{type}/{id}.json
+    if (pathname.match(/^\/meta\/(movie|series|channel|tv)\/.+\.json$/)) {
+      const [_, type, id] = pathname.split("/").slice(1);
+
+      if (!type || !id) {
+        return new Response("Bad request", { status: 400 });
+      }
+
+      if (!config.manifest.types.includes(type as ContentType)) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      if (!config.onMetaRequest) {
+        return new Response("Not found", { status: 404 });
+      }
+
+      const metaResponse = await config.onMetaRequest(type as ContentType, id);
+
+      return new Response(JSON.stringify(metaResponse), {
         headers: {
           "Content-Type": "application/json",
         },

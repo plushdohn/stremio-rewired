@@ -45,6 +45,15 @@ export default defineHandler({
         })),
       };
     },
+    onMetaRequest: async (type, id) => {
+      const idWithoutPrefix = id.replace("animeunity:", "");
+
+      const meta = await provider.getMeta(idWithoutPrefix);
+
+      return {
+        meta,
+      };
+    },
     onStreamRequest: async (type, id) => {
       const idWithoutPrefix = id.replace("animeunity:", "");
 
