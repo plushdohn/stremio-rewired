@@ -1,13 +1,13 @@
 {
   "name": "stremio-rewired",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "private": false,
   "scripts": {
-    "build": "./node_modules/.bin/tsdown",
-    "release": "release-it"
+    "build": "./node_modules/.bin/tsdown"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.7",
     "tsdown": "0.15.9",
     "typescript": "5.9.3"
   },
@@ -19,6 +19,7 @@
   },
   "types": "./dist/index.d.ts",
   "publishConfig": {
+    "access": "public",
     "exports": {
       ".": "./dist/index.js",
       "./package.json": "./package.json"
