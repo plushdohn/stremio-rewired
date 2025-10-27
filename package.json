@@ -1,11 +1,38 @@
 {
-    "name": "stremio-rewired",
-    "devDependencies": {
-        "@changesets/cli": "^2.29.7",
-        "typescript": "5.9.3"
-    },
-    "workspaces": [
-        "examples/*",
-        "packages/*"
-    ]
+  "name": "stremio-rewired",
+  "version": "0.0.4",
+  "type": "module",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plushdohn/stremio-rewired.git"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": "./src/index.ts",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "exports": {
+      ".": "./dist/index.js",
+      "./package.json": "./package.json"
+    }
+  },
+  "scripts": {
+    "build": "./node_modules/.bin/tsdown",
+    "release": "release-it"
+  },
+  "dependencies": {
+    "consola": "^3.4.2",
+    "open": "^10.2.0"
+  },
+  "devDependencies": {
+    "@release-it/conventional-changelog": "^10.0.1",
+    "release-it": "^19.0.5",
+    "tsdown": "0.15.9",
+    "typescript": "5.9.3"
+  }
 }

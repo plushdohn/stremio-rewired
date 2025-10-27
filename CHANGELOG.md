@@ -1,0 +1,3 @@
+# Changelog
+
+## [0.0.5](https://github.com/plushdohn/stremio-rewired/compare/stremio-rewired@0.0.4...0.0.5) (2025-10-27)
