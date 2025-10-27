@@ -1,8 +1,5 @@
 {
     "name": "stremio-rewired",
-    "scripts": {
-        "release": "bun --filter=stremio-rewired release"
-    },
     "devDependencies": {
         "@release-it/bumper": "^7.0.5",
         "release-it": "^19.0.5",
