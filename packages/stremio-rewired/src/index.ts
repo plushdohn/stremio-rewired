@@ -183,7 +183,6 @@ export function createHandler(config: Config) {
       });
     }
 
-    // matches /meta/{type}/{id}.json
     if (pathname.match(/^\/meta\/(movie|series|channel|tv)\/.+\.json$/)) {
       logger.info(`Handling meta request for ${pathname}`);
 
@@ -207,9 +206,7 @@ export function createHandler(config: Config) {
 
       const metaResponse = await config.onMetaRequest(type as ContentType, id);
 
-      logger.info(
-        `Responding with meta response: ${JSON.stringify(metaResponse)}`
-      );
+      logger.info("Responding with meta response");
 
       return new Response(JSON.stringify(metaResponse), {
         headers: {
