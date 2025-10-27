@@ -4,7 +4,8 @@
   "type": "module",
   "private": false,
   "scripts": {
-    "build": "./node_modules/.bin/tsdown"
+    "build": "./node_modules/.bin/tsdown",
+    "prepare": "bun run build"
   },
   "devDependencies": {
     "tsdown": "0.15.9",
