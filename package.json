@@ -1,6 +1,7 @@
 {
     "name": "stremio-rewired",
     "devDependencies": {
+        "@changesets/cli": "^2.29.7",
         "typescript": "5.9.3"
     },
     "workspaces": [
