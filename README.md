@@ -13,9 +13,11 @@ This project is a remake of the [stremio-addon-sdk](https://github.com/Stremio/s
 
 This SDK is still a WIP, and as such many features from the official SDK are missing, mainly:
 
-- **Incomplete protocol and manfiest support**: This SDK only implements a subset of the protocol and the manifest fields. I will implement more as I need them for my addons or if requested.
+- **Incomplete protocol and manifest support**: This SDK only implements a subset of the protocol and the manifest fields. I will implement more as I need them for my addons or if requested.
 - **Missing subtitles support**: Subtitles are not implemented yet
 
 ## Examples
 
-You can see an example addon implemented using this SDK in the `examples` folder. It's an actual, working published addon that I use.
+Addons that use this SDK:
+
+- [Unity](https://github.com/plushdohn/stremio-addon-unity)
