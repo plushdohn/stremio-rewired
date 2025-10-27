@@ -79,7 +79,7 @@ type Manifest = {
 };
 
 export function createHandler(config: Config) {
-  return async function handle(request: Request): Promise<Response> {
+  return async function handle(request: Request): Promise<Response | null> {
     const pathname = new URL(request.url).pathname;
 
     logger.info(`Pathname: ${pathname}`);
@@ -215,7 +215,7 @@ export function createHandler(config: Config) {
       });
     }
 
-    return new Response("Not found", { status: 404 });
+    return null;
   };
 }
 
