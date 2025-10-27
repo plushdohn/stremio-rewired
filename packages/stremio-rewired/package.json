@@ -2,8 +2,10 @@
   "name": "stremio-rewired",
   "version": "0.0.1",
   "type": "module",
+  "private": false,
   "scripts": {
-    "build": "./node_modules/.bin/tsdown"
+    "build": "./node_modules/.bin/tsdown",
+    "release": "release-it"
   },
   "devDependencies": {
     "tsdown": "0.15.9",
@@ -25,5 +27,9 @@
   "dependencies": {
     "consola": "^3.4.2",
     "open": "^10.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/plushdohn/stremio-rewired.git"
   }
 }
