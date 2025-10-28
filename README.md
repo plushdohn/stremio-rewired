@@ -9,14 +9,14 @@ This project is a remake of the [stremio-addon-sdk](https://github.com/Stremio/s
 - **Improved DX and type-safety**: This SDK makes use of Typescript types were possible to further improve DX and ensure addons conform to the Stremio addon protocol.
 - **ESM-first**: The SDK is written in Typescript using modern ES syntax, making it more future-proof and likely to work with modern setups.
 
-## Missing features
+### Missing features
 
 This SDK is still a WIP, and as such many features from the official SDK are missing, mainly:
 
 - **Incomplete protocol and manifest support**: This SDK only implements a subset of the protocol and the manifest fields. Some very important fields such as `behaviorHints` are not supported so beware. I will implement more as I need them for my addons or if requested.
 - **Missing subtitles support**: Subtitles are not implemented yet
 
-## Basic usage
+## Usage
 
 The SDK exports a `createHandler` function thats returns a standard Fetch handler, here's an example using Cloudflare Workers:
 
@@ -70,7 +70,7 @@ For more details on what each handler should return see the official SDK's [prot
 
 Similar to the official SDK, this package also allows you to open a web version of Stremio with your addon pre-installed.
 
-You can import the `launch` and run it anywhere you want (likely at the start of your dev server)
+You can import the `launch` function and run it anywhere you want (likely at the start of your dev server). This will open your default browser on Stremio with your addon installed.
 
 ```ts
 import { launch } from "stremio-rewired";
