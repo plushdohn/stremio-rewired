@@ -1,4 +1,4 @@
-import { logger } from "./log.js";
+import { createConsola, type LogLevel } from "consola";
 
 export { launch } from "./launch.js";
 
@@ -11,6 +11,9 @@ type Config = {
     search?: string
   ) => Promise<CatalogResponse>;
   onMetaRequest?: (type: ContentType, id: string) => Promise<MetaResponse>;
+  options?: {
+    level?: LogLevel;
+  };
 };
 
 type MetaResponse = {
@@ -79,6 +82,13 @@ type Manifest = {
 };
 
 export function createHandler(config: Config) {
+  const logger = createConsola({
+    defaults: {
+      tag: "stremio-rewired",
+    },
+    level: config.options?.level || 0,
+  });
+
   return async function handle(request: Request): Promise<Response | null> {
     const pathname = new URL(request.url).pathname;
 
@@ -172,10 +182,6 @@ export function createHandler(config: Config) {
         search
       );
 
-      logger.info(
-        `Responding with catalog response: ${JSON.stringify(catalogResponse)}`
-      );
-
       return new Response(JSON.stringify(catalogResponse), {
         headers: {
           "Content-Type": "application/json",
@@ -205,8 +211,6 @@ export function createHandler(config: Config) {
       logger.info(`Requesting meta for ${type} ${id}`);
 
       const metaResponse = await config.onMetaRequest(type as ContentType, id);
-
-      logger.info("Responding with meta response");
 
       return new Response(JSON.stringify(metaResponse), {
         headers: {
