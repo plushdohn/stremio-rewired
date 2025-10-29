@@ -1,5 +1,12 @@
 # Changelog
 
+# [0.1.0](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0) (2025-10-29)
+
+
+### Features
+
+* implement rest of manifest ([#1](https://github.com/plushdohn/stremio-rewired/issues/1)) ([b9ed902](https://github.com/plushdohn/stremio-rewired/commit/b9ed902997802cf58fb9d2a21acef9c21eec9538))
+
 # [0.1.0-beta.1](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0-beta.1) (2025-10-29)
 
 # [0.1.0-beta.0](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0-beta.0) (2025-10-29)
