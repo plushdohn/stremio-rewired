@@ -1,5 +1,7 @@
 # Changelog
 
+# [0.1.0-beta.1](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0-beta.1) (2025-10-29)
+
 # [0.1.0-beta.0](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0-beta.0) (2025-10-29)
 
 ## [0.0.10](https://github.com/plushdohn/stremio-rewired/compare/0.0.9...0.0.10) (2025-10-28)
