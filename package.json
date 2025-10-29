@@ -21,6 +21,7 @@
   "access": "public",
   "scripts": {
     "build": "./node_modules/.bin/tsdown",
+    "prerelease": "pnpm build",
     "release": "release-it"
   },
   "dependencies": {
