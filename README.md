@@ -9,12 +9,9 @@ This project is a remake of the [stremio-addon-sdk](https://github.com/Stremio/s
 - **Improved DX and type-safety**: This SDK makes use of Typescript types were possible to further improve DX and ensure addons conform to the Stremio addon protocol.
 - **ESM-first**: The SDK is written in Typescript using modern ES syntax, making it more future-proof and likely to work with modern setups.
 
-### Missing features
+### Known issues
 
-This SDK is still a WIP, and as such many features from the official SDK are missing, mainly:
-
-- **Incomplete protocol and manifest support**: This SDK only implements a subset of the protocol and the manifest fields. Some very important fields such as `behaviorHints` are not supported so beware. I will implement more as I need them for my addons or if requested.
-- **Missing subtitles support**: Subtitles are not implemented yet
+This SDK is still a WIP, and as such it may include bugs, especially in features that I don't personally use often. If you encounter bugs feel free to open an issue.
 
 ## Usage
 
