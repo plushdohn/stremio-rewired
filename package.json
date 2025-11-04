@@ -1,6 +1,6 @@
 {
   "name": "stremio-rewired",
-  "version": "0.2.0-1",
+  "version": "0.2.0",
   "type": "module",
   "private": false,
   "repository": {
