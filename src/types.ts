@@ -229,7 +229,7 @@ export type Config = {
     type: ContentType,
     id: string,
     config?: ConfigValues
-  ) => Promise<MetaResponse>;
+  ) => Promise<MetaResponse | null>;
   onSubtitlesRequest?: (
     type: ContentType,
     id: string,

@@ -2,10 +2,10 @@ import { createConsola } from "consola";
 import type {
   Config,
   ContentType,
-  CatalogExtraArgs,
-  SubtitlesExtraArgs,
   ConfigValues,
   CacheHeaders,
+  CatalogExtraArgs,
+  SubtitlesExtraArgs,
 } from "./types.js";
 
 export type {
@@ -249,6 +249,10 @@ export function createHandler(config: Config) {
         id,
         userConfig
       );
+
+      if (!metaResponse) {
+        return new Response("Not found", { status: 404 });
+      }
 
       return createJsonResponse(metaResponse, metaResponse);
     }
