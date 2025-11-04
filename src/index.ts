@@ -8,7 +8,6 @@ import type {
   CacheHeaders,
 } from "./types.js";
 
-export { launch } from "./launch.js";
 export type {
   ContentType,
   Video,

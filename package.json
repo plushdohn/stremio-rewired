@@ -11,10 +11,15 @@
     "dist",
     "src"
   ],
+  "bin": {
+    "stremio-rewired": "./dist/bin.js"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
+    "./bin": "./dist/bin.js",
+    "./launch": "./dist/launch.js",
     "./package.json": "./package.json"
   },
   "types": "./dist/index.d.ts",
@@ -25,12 +30,13 @@
     "release": "release-it"
   },
   "dependencies": {
-    "consola": "^3.4.2",
-    "open": "^10.2.0"
+    "citty": "0.1.6",
+    "consola": "3.4.2",
+    "open": "10.2.0"
   },
   "devDependencies": {
-    "@release-it/conventional-changelog": "^10.0.1",
-    "release-it": "^19.0.5",
+    "@release-it/conventional-changelog": "10.0.1",
+    "release-it": "19.0.5",
     "tsdown": "0.15.9",
     "typescript": "5.9.3"
   }
