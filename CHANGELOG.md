@@ -1,5 +1,15 @@
 # Changelog
 
+# [0.2.0-0](https://github.com/plushdohn/stremio-rewired/compare/0.1.0...0.2.0-0) (2025-11-04)
+
+
+* feat!: CLI ([14779a0](https://github.com/plushdohn/stremio-rewired/commit/14779a012122fd6bc1911453b90d3b29960fda88))
+
+
+### BREAKING CHANGES
+
+* `launch` is exported from `stremio-rewired/launch`
+
 # [0.1.0](https://github.com/plushdohn/stremio-rewired/compare/0.0.10...0.1.0) (2025-10-29)
 
 
