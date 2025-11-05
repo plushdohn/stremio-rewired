@@ -1,7 +1,7 @@
 # stremio-rewired
 
 > [!WARNING]  
-> This project is a work-in-progress and for now it's only meant for personal use (my own Stremio addons).
+> This SDK is still a work-in-progress, and as such it may include bugs, especially in features that I don't personally use often. If you encounter bugs feel free to open an issue.
 
 This project is a remake of the [stremio-addon-sdk](https://github.com/Stremio/stremio-addon-sdk) using modern Typescript features. The features provided over the original SDK are:
 
@@ -9,9 +9,13 @@ This project is a remake of the [stremio-addon-sdk](https://github.com/Stremio/s
 - **Improved DX and type-safety**: This SDK makes use of Typescript types were possible to further improve DX and ensure addons conform to the Stremio addon protocol.
 - **ESM-first**: The SDK is written in Typescript using modern ES syntax, making it more future-proof and likely to work with modern setups.
 
-### Known issues
+## Installation
 
-This SDK is still a WIP, and as such it may include bugs, especially in features that I don't personally use often. If you encounter bugs feel free to open an issue.
+You can install the package with your package manager:
+
+```bash
+npm install stremio-rewired
+```
 
 ## Usage
 
