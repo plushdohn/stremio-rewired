@@ -63,14 +63,39 @@ export default {
 
 For more details on what each handler should return see the official SDK's [protocol](https://github.com/Stremio/stremio-addon-sdk/blob/master/docs/protocol.md) specification.
 
-### Launching your extension locally
+## Launching your extension locally
 
 Similar to the official SDK, this package also allows you to open a web version of Stremio with your addon pre-installed.
 
-You can import the `launch` function and run it anywhere you want (likely at the start of your dev server). This will open your default browser on Stremio with your addon installed.
+You can either do it via CLI with:
+
+```bash
+npx stremio-rewired launch
+```
+
+Which by default will expect the addon to be on the port 3000, you can specify the port like so;
+
+```bash
+npx stremio-rewired launch -p 1337
+```
+
+The typical workflow locally is to launch the extension along with your dev server in your `package.json`. So you'd have something like this:
+
+```json
+{
+  "scripts": {
+    "dev": "your-dev-script",
+    "dev:addon": "stremio-rewired && npm run dev"
+  }
+}
+```
+
+### Launching programmatically
+
+You can import the `launch` function and run it anywhere you want. This will open your default browser on Stremio with your addon installed.
 
 ```ts
-import { launch } from "stremio-rewired";
+import { launch } from "stremio-rewired/launch";
 
 if (process.env.NODE_ENV === "development") {
   // Launch takes in a port, which should
@@ -78,9 +103,3 @@ if (process.env.NODE_ENV === "development") {
   launch(3000);
 }
 ```
-
-## Examples
-
-Addons that use this SDK:
-
-- [Unity](https://github.com/plushdohn/stremio-addon-unity)
