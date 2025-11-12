@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.1](https://github.com/plushdohn/stremio-rewired/compare/0.2.0...0.2.1) (2025-11-12)
+
+
+### Features
+
+* **#2:** support for extra manifest fields ([#4](https://github.com/plushdohn/stremio-rewired/issues/4)) ([3e7b5d1](https://github.com/plushdohn/stremio-rewired/commit/3e7b5d119dd427d61d1b50223f08ea6100e67438)), closes [#2](https://github.com/plushdohn/stremio-rewired/issues/2) [#2](https://github.com/plushdohn/stremio-rewired/issues/2)
+
 # [0.2.0](https://github.com/plushdohn/stremio-rewired/compare/0.2.0-1...0.2.0) (2025-11-04)
 
 # [0.2.0-1](https://github.com/plushdohn/stremio-rewired/compare/0.2.0-0...0.2.0-1) (2025-11-04)
