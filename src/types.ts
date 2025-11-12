@@ -103,7 +103,7 @@ export type ConfigField = {
   required?: boolean;
 };
 
-export type Manifest = {
+export type Manifest<T = {}> = {
   id: string;
   description: string;
   version: string;
@@ -118,7 +118,7 @@ export type Manifest = {
   logo?: string;
   contactEmail?: string;
   addonCatalogs?: AddonCatalogDefinition[];
-};
+} & T;
 
 export type CatalogItem = {
   id: string;
@@ -212,8 +212,8 @@ export type AddonCatalogResponse = {
   addons: AddonCatalogItem[];
 } & CacheHeaders;
 
-export type Config = {
-  manifest: Manifest;
+export type Config<T = {}> = {
+  manifest: Manifest<T>;
   onStreamRequest?: (
     type: ContentType,
     id: string,

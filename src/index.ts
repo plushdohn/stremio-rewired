@@ -100,7 +100,7 @@ function hasResource(
   });
 }
 
-export function createHandler(config: Config) {
+export function createHandler<T>(config: Config<T>) {
   const logger = createConsola({
     defaults: {
       tag: "stremio-rewired",
