@@ -89,7 +89,7 @@ The typical workflow locally is to launch the extension along with your dev serv
 {
   "scripts": {
     "dev": "your-dev-script",
-    "dev:addon": "stremio-rewired && npm run dev"
+    "dev:addon": "stremio-rewired launch && npm run dev"
   }
 }
 ```
