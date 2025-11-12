@@ -71,7 +71,7 @@ For more details on what each handler should return see the official SDK's [prot
 
 Similar to the official SDK, this package also allows you to open a web version of Stremio with your addon pre-installed.
 
-You can either do it via CLI with:
+You can either do via CLI with:
 
 ```bash
 npx stremio-rewired launch
@@ -94,9 +94,9 @@ The typical workflow locally is to launch the extension along with your dev serv
 }
 ```
 
-### Launching programmatically
+### Launching Stremio programmatically
 
-You can import the `launch` function and run it anywhere you want. This will open your default browser on Stremio with your addon installed.
+You can also import the `launch` function and run it anywhere you want instead of using the CLI. This will open your default browser on Stremio with your addon installed.
 
 ```ts
 import { launch } from "stremio-rewired/launch";
@@ -106,4 +106,47 @@ if (process.env.NODE_ENV === "development") {
   // be the same as your dev server port.
   launch(3000);
 }
+```
+
+## Goodies
+
+### Custom manifest fields
+
+You can extend the Manifest object by providing a generic to `createHandler`:
+
+```ts
+const handler = createHandler<{
+  myCustomField: string;
+}>({
+  manifest: {
+    id: "org.stremio.my-addon",
+    version: "0.0.2",
+    name: "My Addon",
+    description: "This is a cool addon",
+    // rest of manifest
+    myCustomField: "test",
+  },
+});
+```
+
+This is useful for integrating with third-party services that require custom fields in the manifest:
+
+```ts
+const handler = createHandler<{
+  stremioAddonsConfig: {
+    issuer: string;
+    signature: string;
+  };
+}>({
+  manifest: {
+    id: "org.stremio.my-addon",
+    version: "0.0.2",
+    name: "My Addon",
+    description: "This is a cool addon",
+    stremioAddonsConfig: {
+      issuer: "https://stremio-addons.net",
+      signature: "some-signature",
+    },
+  },
+});
 ```
